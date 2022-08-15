@@ -22,7 +22,7 @@ import (
 )
 
 func main() {
-	client := storage_go.NewClient("https://abc.functions.supabase.co", "<service-token>", nil)
+	client := functions.NewClient("https://abc.functions.supabase.co", "<service-token>", nil)
 
 	newData, err := json.Marshal(post)
 	if err != nil {
