@@ -29,7 +29,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Get buckets
 	response := client.invoke("functionName", &FunctionInvokeOptions{
 		Body: bytes.NewBuffer(newData),
 		ResponseType: "json",
