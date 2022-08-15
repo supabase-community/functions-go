@@ -1,3 +1,3 @@
-module github.com/supabase-community/functions-go
+module github.com/ZainUrRehmanKhan/functions-go
 
 go 1.18
