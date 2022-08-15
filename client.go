@@ -1,4 +1,4 @@
-package functions_go
+package functions
 
 import (
 	"net/http"

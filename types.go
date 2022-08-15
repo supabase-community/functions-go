@@ -1,4 +1,4 @@
-package functions_go
+package functions
 
 import "io"
 
@@ -17,6 +17,6 @@ type FunctionInvokeOptions struct {
 type FunctionResponse struct {
 	Data  interface{} `json:"data,omitempty"`
 	Error interface{} `json:"error,omitempty"`
-	//Not specifying int as Status type because it can be null
+	//Not specifying Status as int because it can be null
 	Status interface{} `json:"responseType,omitempty"`
 }

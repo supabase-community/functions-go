@@ -1,7 +1,6 @@
-package functions_go
+package functions
 
 import (
-	"bytes"
 	jsonParser "encoding/json"
 	"io"
 )
@@ -56,16 +55,14 @@ func (c *Client) invoke(functionName string, options FunctionInvokeOptions) Func
 				Error: err,
 			}
 		}
-	} else if responseType == arrayBuffer {
-		data = bytes.NewBuffer(body)
-	} else if responseType == blob {
+	} else if responseType == arrayBuffer || responseType == blob {
 		data = body
 	} else if responseType == text {
 		data = string(body)
 	}
 
 	return FunctionResponse{
-		Error:  data,
+		Data:   data,
 		Status: 200,
 	}
 }
