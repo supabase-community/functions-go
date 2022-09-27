@@ -41,7 +41,7 @@ func (c *Client) TokenAuth(token string) *Client {
 NewClient constructs a new client given a URL to a functions-go instance
 
 Usage:
-	client := storage_go.NewClient("https://abc.functions.supabase.co", "<service-token>", nil)
+	client := functions.NewClient("https://abc.functions.supabase.co", "<service-token>", nil)
 
 Inspired By Postgrest and storage-go.
 */
