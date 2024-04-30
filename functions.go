@@ -16,7 +16,7 @@ Usage:
 		ResponseType	string
 	})
 */
-func (c *Client) invoke(functionName string, options FunctionInvokeOptions) FunctionResponse {
+func (c *Client) Invoke(functionName string, options FunctionInvokeOptions) FunctionResponse {
 	var responseType string
 	if len(options.ResponseType) > 0 {
 		responseType = options.ResponseType
