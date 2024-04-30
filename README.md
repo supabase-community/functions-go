@@ -27,7 +27,7 @@ import (
 )
 
 func main() {
- client := functions.NewClient("https://abc.functions.supabase.co", "<service-token>", nil)
+ client := functions.NewClient("https://abc.supabase.co/functions/v1", "<service-token>", nil)
 
  // Define your data struct
  type Post struct {
