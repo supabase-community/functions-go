@@ -5,10 +5,6 @@ import (
 	"net/url"
 )
 
-var (
-	version = "1.0.0-dev.1"
-)
-
 type Client struct {
 	clientError     error
 	session         http.Client
@@ -41,6 +37,7 @@ func (c *Client) TokenAuth(token string) *Client {
 NewClient constructs a new client given a URL to a functions-go instance
 
 Usage:
+
 	client := functions.NewClient("https://abc.functions.supabase.co", "<service-token>", nil)
 
 Inspired By Postgrest and storage-go.
@@ -66,7 +63,6 @@ func NewClient(rawUrl string, token string, headers map[string]string) *Client {
 	// Set required headers
 	c.clientTransport.header.Set("Accept", "application/json")
 	c.clientTransport.header.Set("Content-Type", "application/json")
-	c.clientTransport.header.Set("X-Client-Info", "functions-go/"+version)
 	c.clientTransport.header.Set("Authorization", "Bearer "+token)
 
 	// Optional headers [if exists]
