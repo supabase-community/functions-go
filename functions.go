@@ -1,68 +1,48 @@
 package functions
 
 import (
-	jsonParser "encoding/json"
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"io"
+	"net/http"
 )
 
-/*
-Invokes a function
-
-functionName: the name of the function to invoke
-
-Usage:
-	invoke("Hello-Function", &FunctionInvokeOptions{
-		Body			io.Reader
-		ResponseType	string
-	})
-*/
-func (c *Client) invoke(functionName string, options FunctionInvokeOptions) FunctionResponse {
-	var responseType string
-	if len(options.ResponseType) > 0 {
-		responseType = options.ResponseType
-	} else {
-		responseType = json
-	}
-	response, _ := c.session.Post(c.clientTransport.baseUrl.String()+"/"+functionName, responseType, options.Body)
-
-	isRelayError := response.Header.Get("x-relay-error")
-	if len(isRelayError) > 0 && isRelayError == "true" {
-		return FunctionResponse{
-			Error:  response,
-			Status: response.StatusCode,
-		}
-	}
-
-	body, err := io.ReadAll(response.Body)
+func (c *Client) Invoke(functionName string, payload interface{}) (string, error) {
+	// Marshal the payload to JSON
+	jsonData, err := json.Marshal(payload)
 	if err != nil {
-		return FunctionResponse{
-			Error: err,
-		}
+		return "", err
 	}
 
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-
-		}
-	}(response.Body)
-
-	var data interface{}
-	if responseType == json {
-		err = jsonParser.Unmarshal(body, &data)
-		if err != nil {
-			return FunctionResponse{
-				Error: err,
-			}
-		}
-	} else if responseType == arrayBuffer || responseType == blob {
-		data = body
-	} else if responseType == text {
-		data = string(body)
+	// Build the URL and create the request
+	url := c.clientTransport.baseUrl.String() + "/" + functionName
+	req, err := http.NewRequest("POST", url, bytes.NewReader(jsonData))
+	if err != nil {
+		return "", err
 	}
 
-	return FunctionResponse{
-		Data:   data,
-		Status: 200,
+	// Set headers
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	// Execute the request using the client's session
+	resp, err := c.session.Do(req)
+	if err != nil {
+		return "", err
 	}
+	defer resp.Body.Close()
+
+	// Read the response body
+	responseBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	// Check HTTP response status code
+	if resp.StatusCode >= 400 {
+		return "", fmt.Errorf("server responded with error: %s", resp.Status)
+	}
+
+	return string(responseBody), nil
 }
