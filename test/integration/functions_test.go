@@ -19,7 +19,7 @@ func TestHello(t *testing.T) {
 		Name string `json:"name"`
 	}
 	b := Body{Name: "world"}
-	resp, err := client.Invoke("hello", b)
+	resp, err := client.Invoke("hello", "POST", b)
 	if err != nil {
 		t.Fatalf("Invoke failed: %s", err)
 	}
@@ -33,7 +33,7 @@ func TestErrorHandling(t *testing.T) {
 		Name string `json:"name"`
 	}
 	b := Body{Name: "error"}
-	resp, err := client.Invoke("hello", b)
+	resp, err := client.Invoke("hello", "POST", b)
 	if err != nil {
 		t.Fatalf("Invoke failed: %s", err)
 	}
